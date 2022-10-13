@@ -1,7 +1,47 @@
-<!DOCTYPE html><html><head>
-    <meta charset="utf-8">
-    <title>Yew App</title>
-  
-<link rel="preload" href="/hello_yew-5063f9493fa4f4cd_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
-<link rel="modulepreload" href="/hello_yew-5063f9493fa4f4cd.js"></head>
-<body><script type="module">import init from '/hello_yew-5063f9493fa4f4cd.js';init('/hello_yew-5063f9493fa4f4cd_bg.wasm');</script></body></html>
+<!DOCTYPE html><html lang="en"><head>
+        <!-- UIkit CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.15.10/dist/css/uikit.min.css">
+
+        <!-- UIkit JS -->
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.15.10/dist/js/uikit.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.15.10/dist/js/uikit-icons.min.js"></script>
+
+        <style>
+            body {
+                background-color: lightgray;
+            }
+        </style>
+
+    
+<link rel="preload" href="/yew_hello_world-312bdcf88d9e6256_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
+<link rel="modulepreload" href="/yew_hello_world-312bdcf88d9e6256.js"></head>
+    <body>
+    
+<script type="module">import init from '/yew_hello_world-312bdcf88d9e6256.js';init('/yew_hello_world-312bdcf88d9e6256_bg.wasm');</script><script>(function () {
+    var protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    var url = protocol + '//' + window.location.host + '/_trunk/ws';
+    var poll_interval = 5000;
+    var reload_upon_connect = () => {
+        window.setTimeout(
+            () => {
+                // when we successfully reconnect, we'll force a
+                // reload (since we presumably lost connection to
+                // trunk due to it being killed, so it will have
+                // rebuilt on restart)
+                var ws = new WebSocket(url);
+                ws.onopen = () => window.location.reload();
+                ws.onclose = reload_upon_connect;
+            },
+            poll_interval);
+    };
+
+    var ws = new WebSocket(url);
+    ws.onmessage = (ev) => {
+        const msg = JSON.parse(ev.data);
+        if (msg.reload) {
+            window.location.reload();
+        }
+    };
+    ws.onclose = reload_upon_connect;
+})()
+</script></body></html>
